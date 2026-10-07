@@ -1,0 +1,30 @@
+---
+// Pagină de text legal, cu conținutul preluat ca atare de pe site-ul vechi (src/legal/*.html).
+// TODO(real): textele se rescriu la proiectul final (GDPR, cookie-uri reale, diacritice).
+import Layout from '../layouts/Layout.astro';
+
+interface Props {
+  title: string;
+  html: string;
+}
+const { title, html } = Astro.props;
+---
+<Layout title={`${title} | Big Print Solutions`}>
+  <section class="legal">
+    <div class="wrap">
+      <h1>{title}</h1>
+      <div class="prose" set:html={html} />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .legal { padding-block: clamp(2.5rem, 6vw, 4.5rem) clamp(3.5rem, 8vw, 6rem); }
+  h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); margin-bottom: 2rem; }
+  .prose { max-width: 46rem; }
+  .prose :global(p) { margin-bottom: 1rem; }
+  .prose :global(h2) { font-size: 1.5rem; margin: 2rem 0 0.75rem; }
+  .prose :global(ul) { list-style: disc; padding-left: 1.25rem; margin-bottom: 1rem; }
+  .prose :global(li) { margin-bottom: 0.4rem; }
+  .prose :global(a) { text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+</style>

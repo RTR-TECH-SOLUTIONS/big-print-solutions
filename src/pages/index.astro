@@ -1,0 +1,267 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Shot from '../components/Shot.astro';
+import FilmStrip from '../components/FilmStrip.astro';
+import PriceTable from '../components/PriceTable.astro';
+import CtaBand from '../components/CtaBand.astro';
+import IconWhatsapp from '../components/IconWhatsapp.astro';
+import { site, u, waDefault } from '../data/site';
+import { minPrice, groupById, unitLabel, fmt } from '../data/preturi';
+import { clients, workByFile } from '../data/lucrari';
+
+const services = [
+  {
+    group: 'print',
+    href: '/print-format-mare',
+    photo: 'pa-07',
+    title: 'Print format mare',
+    text: 'Bannere, mesh, autocolante, one way vision, canvas, tapet, afișe și planșe CAD.'
+  },
+  {
+    group: 'firme',
+    href: '/firme-si-litere-volumetrice',
+    photo: 'fp-13',
+    title: 'Firme și litere volumetrice',
+    text: 'Litere din polistiren, PVC sau plexiglas, cu sau fără LED, casete luminoase, frontoane din alucobond, totemuri.'
+  },
+  {
+    group: 'auto',
+    href: '/colantari-auto',
+    photo: 'au-04',
+    title: 'Colantări auto',
+    text: 'Inscripționări de uși, colantări parțiale și integrale, autobuze, prelate de TIR, stickere moto și ATV.'
+  }
+].map((s) => {
+  const g = groupById(s.group);
+  const row = g.rows.find((r) => r.price === minPrice(s.group))!;
+  return { ...s, price: fmt(row.price), unit: unitLabel[row.unit] };
+});
+
+const strip = ['fp-05', 'pa-03', 'au-07', 'fl-16', 'fp-13', 'au-01', 'pa-01', 'fl-05', 'au-04', 'fp-06', 'pd-04', 'fl-18'];
+const mosaic = ['fl-08', 'au-20', 'pa-12', 'fp-12', 'st-03', 'gs-01'];
+---
+<Layout title="Big Print Solutions | Producție publicitară în Râmnicu Vâlcea, din 1998">
+  <section class="hero">
+    <div class="wrap">
+      <h1>Producție publicitară în <span class="mark">Râmnicu Vâlcea</span>, din {site.since}</h1>
+      <div class="hero-side">
+        <p class="lead">Printăm, decupăm și montăm cu utilajele noastre: bannere, mesh, autocolante, litere volumetrice, firme luminoase și colantări auto.</p>
+        <div class="hero-actions">
+          <a href={waDefault} class="btn btn-yellow" target="_blank" rel="noopener"><IconWhatsapp /> Cere ofertă pe WhatsApp</a>
+          <a href={u('/preturi')} class="btn btn-line-light">Vezi prețurile</a>
+        </div>
+      </div>
+    </div>
+
+    <FilmStrip files={strip} />
+
+    <div class="wrap facts">
+      <p><strong class="num">{new Date().getFullYear() - site.since} de ani</strong> Producție publicitară în același oraș, din {site.since}.</p>
+      <p><strong>Mutoh Spitfire și Océ 9065</strong> Print eco-solvent pentru interior și exterior.</p>
+      <p><strong>Montaj cu echipa noastră</strong> Inclusiv la înălțime, prin alpinism utilitar.</p>
+    </div>
+  </section>
+
+  <section class="services">
+    <div class="wrap">
+      <h2>Ce executăm</h2>
+      <ul class="service-list">
+        {services.map((s) => (
+          <li>
+            <a href={u(s.href)} class="service">
+              <div class="service-img">
+                <img
+                  src={u(`/lucrari/${s.photo}.webp`)}
+                  alt=""
+                  width={workByFile(s.photo).w}
+                  height={workByFile(s.photo).h}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div class="service-body">
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </div>
+              <p class="service-price">
+                <span>de la</span>
+                <strong class="num">{s.price}</strong>
+                <span>{s.unit}</span>
+              </p>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="also">Facem și promoționale inscripționate, serigrafie, steaguri, materiale electorale, pardoseli epoxidice printate și amenajări. <a class="text-link" href={u('/alte-servicii')}>Vezi toate serviciile</a></p>
+    </div>
+  </section>
+
+  <section class="prices">
+    <div class="wrap prices-in">
+      <div class="prices-intro">
+        <h2>Prețuri la vedere</h2>
+        <p>Știți de la început cât costă metrul pătrat. Pentru totalul lucrării folosiți calculatorul sau trimiteți-ne dimensiunile.</p>
+        <a href={u('/preturi')} class="btn btn-ink">Toate prețurile și calculatorul</a>
+      </div>
+      <PriceTable group="print" limit={6} />
+    </div>
+  </section>
+
+  <section class="works">
+    <div class="wrap">
+      <div class="works-head">
+        <h2>Lucrări montate</h2>
+        <a href={u('/portofoliu')} class="text-link">Tot portofoliul</a>
+      </div>
+      <div class="mosaic">
+        {mosaic.map((file) => <Shot file={file} ratio="4 / 3" />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="clients" aria-label="Clienți">
+    <h2 class="sr-only">Am lucrat pentru</h2>
+    <div class="marquee">
+      <p class="marquee-track">
+        {[0, 1].map((copy) => (
+          <span aria-hidden={copy === 1 ? 'true' : undefined}>
+            {clients.map((c) => <span class="client">{c}</span>)}
+          </span>
+        ))}
+      </p>
+    </div>
+  </section>
+
+  <section class="height">
+    <div class="wrap height-in">
+      <Shot file="al-01" />
+      <div>
+        <h2>Montăm și acolo unde nu ajunge schela</h2>
+        <p>Avem alpiniști utilitari în echipă. Urcăm mesh-uri pe fațade de bloc, fixăm litere pe frontoane înalte și schimbăm bannere pe clădiri, fără schelă și fără nacelă închiriată.</p>
+        <p>Vindem și imprimante eco-solvent second-hand, din stoc sau la comandă, și le facem service. <a class="text-link" href={u('/alte-servicii#imprimante')}>Detalii</a></p>
+        <a href={u('/despre')} class="btn btn-line">Despre noi</a>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Layout>
+
+<style>
+  .hero {
+    background: var(--color-ink);
+    color: #fff;
+    padding-block: clamp(3rem, 7vw, 6rem) 0;
+  }
+  .hero h1 { font-size: clamp(2.6rem, 7.6vw, 6.5rem); max-width: 16ch; }
+  .hero .mark { background-size: 100% 0.16em; background-position: 0 96%; }
+  .hero-side {
+    margin-top: clamp(1.5rem, 3vw, 2.5rem);
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+  .hero .lead { color: #cfccc4; max-width: 34rem; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+  .facts {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding-block: 1.75rem clamp(2.5rem, 5vw, 3.5rem);
+    border-top: 1px solid #3a3936;
+    color: #cfccc4;
+  }
+  .facts strong { display: block; color: #fff; font-size: 1.25rem; font-weight: 800; font-stretch: 88%; margin-bottom: 0.15rem; }
+
+  .services, .works { padding-block: clamp(3.5rem, 8vw, 6.5rem); }
+  .service-list { margin-top: 2rem; border-top: 3px solid var(--color-ink); }
+  .service {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: 1rem 1.25rem;
+    align-items: center;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--color-line);
+    text-decoration: none;
+  }
+  .service-img { overflow: hidden; border-radius: var(--radius-card); }
+  .service img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .service:hover img { transform: scale(1.06); }
+  .service h3 {
+    display: inline;
+    font-size: clamp(1.5rem, 3.4vw, 2.6rem);
+    background-image: linear-gradient(var(--color-yellow), var(--color-yellow));
+    background-repeat: no-repeat;
+    background-size: 0% 0.2em;
+    background-position: 0 92%;
+    transition: background-size 300ms ease-out;
+  }
+  .service:hover h3 { background-size: 100% 0.2em; }
+  .service-body p { margin-top: 0.6rem; color: var(--color-ink-soft); max-width: 34rem; }
+  .service-price { grid-column: 2; display: flex; align-items: baseline; gap: 0.4rem; color: var(--color-ink-soft); font-size: 0.9rem; }
+  .service-price strong {
+    color: var(--color-ink);
+    font-weight: 800;
+    font-stretch: 88%;
+    font-size: 2rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .also { margin-top: 1.5rem; color: var(--color-ink-soft); max-width: 44rem; }
+
+  .prices { background: var(--color-stock); padding-block: clamp(3.5rem, 8vw, 6rem); }
+  .prices-in { display: grid; gap: 2.5rem; }
+  .prices-intro p { margin-block: 1rem 1.5rem; color: var(--color-ink-soft); max-width: 26rem; }
+  .prices :global(tbody tr:hover) { background: #ebe8e0; }
+
+  .works-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; }
+  .mosaic { display: grid; gap: 2rem 1.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+
+  .clients { background: var(--color-yellow); color: var(--color-ink); padding-block: clamp(1.25rem, 2.5vw, 2rem); overflow: hidden; }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    font-weight: 800;
+    font-stretch: 85%;
+    font-size: clamp(1.75rem, 4.5vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    animation: clients 60s linear infinite;
+  }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  .client::after { content: '/'; margin-inline: 0.5em; opacity: 0.35; font-weight: 400; }
+  @keyframes clients { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; white-space: normal; width: auto; padding-inline: 1.25rem; font-size: 1.5rem; }
+    .marquee-track > span[aria-hidden='true'] { display: none; }
+  }
+
+  .height { padding-top: clamp(3.5rem, 8vw, 6.5rem); }
+  .height { padding-bottom: clamp(3.5rem, 8vw, 6.5rem); }
+  .height-in { display: grid; gap: 2.5rem; align-items: center; }
+  .height p { margin-top: 1rem; color: var(--color-ink-soft); max-width: 32rem; }
+  .height .btn { margin-top: 1.75rem; }
+
+  @media (min-width: 700px) {
+    .facts { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+    .service { grid-template-columns: 15rem 1fr auto; gap: 2.5rem; padding: 2rem 0; }
+    .service-price { grid-column: auto; flex-direction: column; align-items: flex-end; gap: 0.1rem; text-align: right; min-width: 8rem; }
+    .service-price strong { font-size: 3.25rem; }
+    .mark { white-space: nowrap; }
+  }
+  @media (min-width: 900px) {
+    .hero-side { grid-template-columns: 1fr auto; gap: 3rem; align-items: end; }
+    .prices-in { grid-template-columns: 1fr 1.7fr; gap: 4rem; }
+    .prices-intro { position: sticky; top: calc(var(--header-h) + 2rem); align-self: start; }
+    .height-in { grid-template-columns: 1fr 1fr; gap: 4rem; }
+    .mosaic { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>

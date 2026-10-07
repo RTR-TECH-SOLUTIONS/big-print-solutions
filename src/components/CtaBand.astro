@@ -1,0 +1,48 @@
+---
+import IconWhatsapp from './IconWhatsapp.astro';
+import { site, wa } from '../data/site';
+
+interface Props {
+  title?: string;
+  text?: string;
+  message?: string;
+}
+const {
+  title = 'Trimiteți dimensiunile și primiți prețul în aceeași zi',
+  text = 'Scrieți-ne ce vă trebuie, cu dimensiuni și o poză a locului de montaj. Răspundem cu preț și termen de execuție.',
+  message = 'Bună ziua! Aș dori o ofertă pentru: '
+} = Astro.props;
+---
+<section class="cta">
+  <div class="wrap cta-in">
+    <div>
+      <h2>{title}</h2>
+      <p>{text}</p>
+    </div>
+    <div class="cta-actions">
+      <a href={wa(message)} class="btn btn-yellow" target="_blank" rel="noopener"><IconWhatsapp /> Cere ofertă pe WhatsApp</a>
+      <a href={site.phoneHref} class="btn btn-line-light num">Sună: {site.phone}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    background: var(--color-ink-800);
+    color: #fff;
+    padding-block: clamp(3rem, 7vw, 5rem);
+    border-bottom: 1px solid #33322f;
+  }
+  .cta-in {
+    display: grid;
+    gap: 2rem;
+    align-items: end;
+  }
+  h2 { max-width: 18ch; }
+  p { margin-top: 1rem; color: #cfccc4; max-width: 34rem; }
+  .cta-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  @media (min-width: 900px) {
+    .cta-in { grid-template-columns: 1.4fr auto; }
+    .cta-actions { flex-direction: column; align-items: stretch; }
+  }
+</style>

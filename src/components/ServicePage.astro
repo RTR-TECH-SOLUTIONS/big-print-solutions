@@ -1,0 +1,109 @@
+---
+// Șablon comun pentru paginile de serviciu: titlu + poză, ce include, tarif, lucrări.
+import Layout from '../layouts/Layout.astro';
+import Shot from './Shot.astro';
+import PriceTable from './PriceTable.astro';
+import CtaBand from './CtaBand.astro';
+import IconWhatsapp from './IconWhatsapp.astro';
+import { wa, u } from '../data/site';
+import { minPrice, groupById, unitLabel, fmt } from '../data/preturi';
+
+interface Props {
+  title: string;
+  metaTitle: string;
+  lead: string;
+  group: string;
+  hero: string;
+  points: { title: string; text: string }[];
+  gallery: string[];
+  message: string;
+}
+const { title, metaTitle, lead, group, hero, points, gallery, message } = Astro.props;
+const g = groupById(group);
+const cheapest = g.rows.find((r) => r.price === minPrice(group))!;
+---
+<Layout title={metaTitle} description={lead}>
+  <section class="head">
+    <div class="wrap head-in">
+      <div>
+        <h1>{title}</h1>
+        <p class="lead">{lead}</p>
+        <p class="from">
+          De la <strong class="num">{fmt(cheapest.price)} {unitLabel[cheapest.unit]}</strong>
+          <span>({cheapest.name.toLowerCase()})</span>
+        </p>
+        <div class="actions">
+          <a href={wa(message)} class="btn btn-yellow" target="_blank" rel="noopener"><IconWhatsapp /> Cere ofertă</a>
+          <a href="#tarif" class="btn btn-line-light">Vezi prețurile</a>
+        </div>
+      </div>
+      <Shot file={hero} eager />
+    </div>
+  </section>
+
+  <section class="points">
+    <div class="wrap points-in">
+      {points.map((p) => (
+        <div class="point">
+          <h3>{p.title}</h3>
+          <p>{p.text}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="tarif-sec" id="tarif">
+    <div class="wrap">
+      <h2>Prețuri {g.title.toLowerCase()}</h2>
+      <PriceTable group={group} />
+      <p class="more"><a class="text-link" href={u('/preturi')}>Lista completă de prețuri și calculatorul pe metru pătrat</a></p>
+    </div>
+  </section>
+
+  <section class="gallery-sec">
+    <div class="wrap">
+      <h2>Lucrări din această categorie</h2>
+      <div class="gallery">
+        {gallery.map((file) => <Shot file={file} ratio="4 / 3" />)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand message={message} />
+</Layout>
+
+<style>
+  .head { padding-block: clamp(2.5rem, 6vw, 5rem); background: var(--color-ink); color: #fff; }
+  .head .lead { color: #cfccc4; }
+  .head :global(figcaption span) { color: #a9a69e; }
+  .head-in { display: grid; gap: 2.5rem; align-items: center; }
+  h1 { font-size: clamp(2.4rem, 5.6vw, 4.5rem); }
+  .lead { margin-top: 1.25rem; max-width: 34rem; }
+  .from { margin-top: 1.5rem; font-size: 1.05rem; }
+  .from strong {
+    font-weight: 800;
+    font-size: 1.5rem;
+    font-stretch: 88%;
+    color: var(--color-yellow);
+  }
+  .from span { color: #a9a69e; margin-left: 0.35rem; }
+  .actions { margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+  .points { background: var(--color-stock); padding-block: clamp(2.5rem, 5vw, 4rem); }
+  .points-in { display: grid; gap: 2rem; }
+  .point { border-top: 3px solid var(--color-ink); padding-top: 1rem; }
+  .point p { margin-top: 0.6rem; color: var(--color-ink-soft); }
+
+  .tarif-sec, .gallery-sec { padding-block: clamp(3rem, 7vw, 5.5rem); }
+  .gallery-sec { padding-top: 0; }
+  .tarif-sec h2, .gallery-sec h2 { margin-bottom: 2rem; }
+  .more { margin-top: 1.5rem; }
+
+  .gallery { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+
+  @media (min-width: 900px) {
+    .head-in { grid-template-columns: 1fr 1.25fr; gap: 4rem; }
+    .gallery { grid-template-columns: repeat(3, 1fr); }
+    .points-in { grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+  }
+</style>

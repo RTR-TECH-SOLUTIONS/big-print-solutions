@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+*.log
+.playwright-mcp/
+# materialul brut descărcat de pe site-ul vechi al clientului (47 MB), rămâne doar local
+_client-material/

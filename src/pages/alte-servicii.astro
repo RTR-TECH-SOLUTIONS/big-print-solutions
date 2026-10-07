@@ -1,0 +1,248 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Shot from '../components/Shot.astro';
+import PriceTable from '../components/PriceTable.astro';
+import CtaBand from '../components/CtaBand.astro';
+import IconWhatsapp from '../components/IconWhatsapp.astro';
+import { wa } from '../data/site';
+import { clients } from '../data/lucrari';
+
+// Serviciile enumerate pe site-ul vechi care nu au pagină proprie.
+const groups = [
+  {
+    id: 'promotionale',
+    title: 'Promoționale și serigrafie',
+    text: 'Inscripționăm prin serigrafie, tampografie și gravură, pe utilajele noastre.',
+    items: [
+      'Căni', 'Tricouri, eșarfe, cravate', 'Echipament sportiv', 'Pixuri', 'Brichete', 'Agende',
+      'Calendare', 'Mouse pad-uri', 'Baloane', 'Insigne', 'Gravură', 'Steaguri'
+    ],
+    photos: ['sg-01', 'sg-03', 'sg-02']
+  },
+  {
+    id: 'semnalistica',
+    title: 'Semnalistică și panouri',
+    text: 'De la o plăcuță de stradă până la un panou publicitar montat pe structură.',
+    items: [
+      'Plăcuțe stradale', 'Indicatoare', 'Semne de orientare', 'Panouri publicitare',
+      'Publicitate pe clădiri', 'Materiale electorale'
+    ],
+    photos: ['pn-09', 'pn-05', 'el-04']
+  },
+  {
+    id: 'amenajari',
+    title: 'Amenajări și decoruri',
+    text: 'Print aplicat pe pereți, podele și mobilier, pentru spații comerciale și scenă.',
+    items: [
+      'Printuri pentru pardoseli epoxidice', 'Design interior pentru restaurante, pub-uri, cafenele și hoteluri',
+      'Print și înrămare de tablouri', 'Decoruri de teatru și televiziune', 'Postere de mari dimensiuni',
+      'Umbrele de terasă personalizate', 'Copertine', 'Decupaje din polistiren'
+    ],
+    photos: ['pd-04', 'pd-02', 'pc-05']
+  },
+  {
+    id: 'alpinism',
+    title: 'Alpinism utilitar',
+    text: 'Montăm la înălțime, pe coardă, acolo unde schela sau nacela nu au loc ori costă prea mult.',
+    items: [
+      'Montaj de mesh-uri pe fațade', 'Litere și firme pe frontoane înalte',
+      'Schimbare de bannere pe clădiri', 'Lucrări pe acoperișuri și calcane'
+    ],
+    photos: ['al-01', 'al-04', 'pn-06']
+  },
+  {
+    id: 'agentie',
+    title: 'Creație și campanii',
+    text: 'Lucrăm sub numele Ilustrator Advertising din 1998, de la machetă până la difuzare.',
+    items: [
+      'Strategii de comunicare și de media', 'Identitate vizuală (corporate ID)', 'Design de ambalaj', 'Web design',
+      'Marketing direct', 'Evenimente', 'Afișe de spectacol', 'Publicitate pe panouri stradale sau clădiri',
+      'Publicitate pe autobuze', 'Publicitate pe bicicletă', 'Promovare de evenimente', 'Promovare la radio și televiziuni'
+    ],
+    photos: ['pb-05', 'pb-03', 'ph-08']
+  },
+  {
+    id: 'foto-film',
+    title: 'Fotografie și film',
+    text: 'Fotografie publicitară și film de prezentare, plus evenimente și nunți.',
+    items: ['Fotografie publicitară', 'Fotografie de evenimente și nunți', 'Film publicitar', 'Film de evenimente și nunți'],
+    photos: ['ft-01']
+  }
+];
+// Clipurile publicate de firmă pe site-ul vechi (Vimeo).
+const films = [
+  { id: '53769174', title: 'Cupa Cupelor la Hard Enduro, Enduro Maniaco Depresiv 2012' },
+  { id: '67549267', title: 'Romanian National Championship of Hard Enduro, EMD 2013' }
+];
+const message = 'Bună ziua! Aș dori o ofertă pentru: ';
+---
+<Layout
+  title="Alte servicii: promoționale, semnalistică, amenajări | Big Print Solutions"
+  description="Promoționale inscripționate, serigrafie, plăcuțe și indicatoare, materiale electorale, pardoseli epoxidice printate, decoruri și imprimante eco-solvent second-hand."
+>
+  <section class="head">
+    <div class="wrap head-in">
+      <div>
+        <h1>Alte servicii</h1>
+        <p class="lead">Tot ce mai executăm în atelier, pe lângă print, firme și colantări.</p>
+        <nav class="jump" aria-label="Sari la serviciu">
+          {groups.map((g) => <a href={`#${g.id}`}>{g.title}</a>)}
+          <a href="#imprimante">Imprimante eco-solvent</a>
+        </nav>
+      </div>
+      <Shot file="pa-04" eager />
+    </div>
+  </section>
+
+  <section class="groups">
+    <div class="wrap">
+      {groups.map((g) => (
+        <div class="group" id={g.id}>
+          <div class="group-head">
+            <h2>{g.title}</h2>
+            <p>{g.text}</p>
+            <a href={wa(`${message}${g.title.toLowerCase()}`)} class="text-link" target="_blank" rel="noopener">Cere ofertă</a>
+          </div>
+          <div class="group-body">
+            <ul class="items">
+              {g.items.map((item) => <li>{item}</li>)}
+            </ul>
+            <div class="group-photos">
+              {g.photos.map((file) => <Shot file={file} ratio="4 / 3" />)}
+            </div>
+            {g.id === 'foto-film' && (
+              <div class="films">
+                {films.map((f) => (
+                  <figure>
+                    <iframe
+                      src={`https://player.vimeo.com/video/${f.id}?title=0&byline=0&portrait=0`}
+                      title={f.title}
+                      loading="lazy"
+                      allow="fullscreen; picture-in-picture"
+                      allowfullscreen></iframe>
+                    <figcaption>{f.title}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="promo-prices">
+    <div class="wrap">
+      <h2>Prețuri promoționale</h2>
+      <PriceTable group="promo" />
+    </div>
+  </section>
+
+  <section class="printers" id="imprimante">
+    <div class="wrap">
+      <div class="printers-in">
+        <Shot file="im-01" />
+        <div>
+          <h2>Imprimante eco-solvent second-hand și service</h2>
+          <p>Aducem la comandă sau vindem din stoc imprimante cu cerneală eco-solvent. Aceste modele sunt deosebit de versatile și recunoscute pentru calitatea lor: îmbină calitatea excelentă a printurilor (până la 1440 dpi rezoluție) cu durabilitatea de până la 3 ani.</p>
+          <p>Pot printa pe o mare varietate de materiale „uncoated”, dar nu pe toate, fiind din acest punct de vedere mai scumpe ca preț de producție decât imprimantele cu cerneală real-solvent. De asemenea, cerneala este mai scumpă, dar aceste imprimante nu necesită sisteme speciale de ventilare, neemanând mirosuri neplăcute. În plus, pot fi folosite fără probleme și pentru printuri indoor, datorită calității foarte bune a printurilor.</p>
+          <p>Recomandăm imprimantele eco-solvent firmelor care au aplicații atât indoor, cât și outdoor și care nu au resursele necesare pentru achiziționarea a două echipamente dedicate fiecărei aplicații în parte.</p>
+          <a href={wa('Bună ziua! Mă interesează o imprimantă eco-solvent / service. ')} class="btn btn-yellow" target="_blank" rel="noopener"><IconWhatsapp /> Întreabă de stoc</a>
+        </div>
+      </div>
+      <div class="printer-photos">
+        {['im-03', 'im-07', 'im-06'].map((file) => <Shot file={file} ratio="4 / 3" />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="all-clients">
+    <div class="wrap">
+      <h2>Am lucrat pentru</h2>
+      <ul class="client-cols">
+        {clients.map((c) => <li>{c}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand />
+</Layout>
+
+<style>
+  .head { padding-block: clamp(2.5rem, 6vw, 5rem); background: var(--color-ink); color: #fff; }
+  .head-in { display: grid; gap: 2.5rem; align-items: center; }
+  h1 { font-size: clamp(2.4rem, 5.6vw, 4.5rem); }
+  .head .lead { margin-top: 1.25rem; color: #cfccc4; max-width: 30rem; }
+  .head :global(figcaption span) { color: #a9a69e; }
+  .jump { margin-top: 1.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+  .jump a {
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+    text-decoration-color: var(--color-yellow);
+  }
+  .jump a:hover { color: var(--color-yellow); }
+
+  .groups { padding-block: clamp(2rem, 5vw, 4rem) clamp(3rem, 6vw, 5rem); }
+  .group {
+    display: grid;
+    gap: 1.5rem;
+    padding-block: clamp(2rem, 4vw, 3rem);
+    border-bottom: 1px solid var(--color-line);
+    scroll-margin-top: calc(var(--header-h) + 1rem);
+  }
+  .group:last-child { border-bottom: 0; }
+  .group-head p { margin-block: 0.9rem 1rem; color: var(--color-ink-soft); max-width: 26rem; }
+  .group-body { display: grid; gap: 1.75rem; min-width: 0; }
+  .group-photos { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); }
+  .films { display: grid; gap: 1.5rem; }
+  .films figure { margin: 0; }
+  .films iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: var(--radius-card); background: var(--color-ink); }
+  .films figcaption { margin-top: 0.6rem; font-size: 0.92rem; color: var(--color-ink-soft); }
+  .printer-photos { margin-top: 2.5rem; display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); }
+  .items { border-top: 3px solid var(--color-ink); columns: 2 14rem; column-gap: 2.5rem; }
+  .items li {
+    break-inside: avoid;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--color-line);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .promo-prices { background: var(--color-stock); padding-block: clamp(3rem, 7vw, 5.5rem); }
+  .promo-prices h2 { margin-bottom: 2rem; }
+  .promo-prices :global(tbody tr:hover) { background: #ebe8e0; }
+
+  .printers { padding-block: clamp(3.5rem, 8vw, 6.5rem); scroll-margin-top: var(--header-h); }
+  .printers-in { display: grid; gap: 2.5rem; align-items: center; }
+  .printers p { margin-top: 1rem; color: var(--color-ink-soft); max-width: 34rem; }
+  .printers .btn { margin-top: 1.75rem; }
+
+  .all-clients { border-top: 1px solid var(--color-line); padding-block: clamp(3rem, 7vw, 5.5rem); }
+  .client-cols {
+    margin-top: 2rem;
+    columns: 3 14rem;
+    column-gap: 2.5rem;
+    border-top: 3px solid var(--color-ink);
+  }
+  .client-cols li {
+    break-inside: avoid;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--color-line);
+    font-weight: 700;
+    font-stretch: 90%;
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 520px) {
+    .group-photos { grid-template-columns: 1fr 1fr; }
+    .group-photos > :global(:nth-child(3)) { display: none; }
+  }
+  @media (min-width: 900px) {
+    .head-in { grid-template-columns: 1.25fr 1fr; gap: 4rem; }
+    .group { grid-template-columns: 1fr 1.7fr; gap: 4rem; }
+    .printers-in { grid-template-columns: 1fr 1fr; gap: 4rem; }
+    .films { grid-template-columns: 1fr 1fr; }
+  }
+</style>

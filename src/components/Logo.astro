@@ -1,0 +1,16 @@
+---
+import { site, u } from '../data/site';
+
+interface Props {
+  size?: number;
+}
+const { size = 52 } = Astro.props;
+---
+<a href={u('/')} class="logo" aria-label={`${site.name}, pagina principală`}>
+  <img src={u('/logo.png')} alt={site.name} width="110" height="120" style={`height:${size}px`} />
+</a>
+
+<style>
+  .logo { display: inline-flex; align-items: center; }
+  img { display: block; width: auto; }
+</style>

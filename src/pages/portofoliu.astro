@@ -1,0 +1,99 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Shot from '../components/Shot.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { works, kindLabel, clients } from '../data/lucrari';
+import type { WorkKind } from '../data/lucrari';
+
+const kinds = Object.keys(kindLabel) as WorkKind[];
+---
+<Layout title="Portofoliu: lucrări executate | Big Print Solutions">
+  <section class="head">
+    <div class="wrap">
+      <h1>Portofoliu</h1>
+      <p class="lead">Lucrări executate și montate de noi, în Râmnicu Vâlcea și în țară.</p>
+
+      <div class="filters" role="group" aria-label="Filtrează lucrările">
+        <button type="button" class="chip" aria-pressed="true" data-filter="all">Toate <span class="num">{works.length}</span></button>
+        {kinds.map((k) => (
+          <button type="button" class="chip" aria-pressed="false" data-filter={k}>
+            {kindLabel[k]} <span class="num">{works.filter((w) => w.kind === k).length}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="grid-sec">
+    <div class="wrap">
+      <ul class="grid" data-grid>
+        {works.map((w) => (
+          <li data-kind={w.kind}>
+            <Shot file={w.file} ratio="4 / 3" />
+          </li>
+        ))}
+      </ul>
+      <p class="empty" hidden data-empty>Nicio lucrare în această categorie.</p>
+    </div>
+  </section>
+
+  <section class="clients">
+    <div class="wrap">
+      <h2>Am lucrat pentru</h2>
+      <p class="client-list">{clients.join(' · ')}</p>
+    </div>
+  </section>
+
+  <CtaBand />
+</Layout>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const items = document.querySelectorAll<HTMLElement>('[data-grid] > li');
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const filter = chip.dataset.filter;
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      items.forEach((item) => {
+        item.hidden = filter !== 'all' && item.dataset.kind !== filter;
+      });
+    });
+  });
+</script>
+
+<style>
+  .head { padding-block: clamp(2.5rem, 6vw, 4.5rem) 2rem; }
+  .lead { margin-top: 1rem; }
+  .filters { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip {
+    min-height: 2.75rem;
+    padding: 0.5rem 0.9rem;
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-btn);
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 150ms ease-out, color 150ms ease-out;
+  }
+  .chip span { font-weight: 500; opacity: 0.65; margin-left: 0.25rem; }
+  .chip:hover { background: var(--color-stock); }
+  .chip[aria-pressed='true'] { background: var(--color-ink); color: #fff; }
+
+  .grid-sec { padding-bottom: clamp(3rem, 7vw, 5.5rem); }
+  .grid {
+    display: grid;
+    gap: 2rem 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  }
+  .grid li[hidden] { display: none; }
+
+  .clients { background: var(--color-stock); padding-block: clamp(3rem, 6vw, 4.5rem); }
+  .client-list {
+    margin-top: 1.5rem;
+    font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+    font-weight: 700;
+    font-stretch: 88%;
+    line-height: 1.5;
+    max-width: 60rem;
+  }
+</style>

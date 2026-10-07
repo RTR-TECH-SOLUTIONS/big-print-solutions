@@ -1,0 +1,83 @@
+---
+// Listă de tarife de atelier: material, specificație, utilizare, preț.
+import { groupById, unitLabel, fmt } from '../data/preturi';
+
+interface Props {
+  group: string;
+  limit?: number;
+  heading?: boolean;
+}
+const { group, limit, heading = false } = Astro.props;
+const g = groupById(group);
+const rows = limit ? g.rows.slice(0, limit) : g.rows;
+---
+<div class="tarif">
+  {heading && <h3 id={`tarif-${g.id}`}>{g.title}</h3>}
+  <table>
+    <caption class="sr-only">Prețuri orientative: {g.title}</caption>
+    <thead>
+      <tr>
+        <th scope="col">Material / lucrare</th>
+        <th scope="col" class="col-use">Unde se folosește</th>
+        <th scope="col" class="col-price">Preț de la</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((r) => (
+        <tr>
+          <th scope="row">
+            <span class="name">{r.name}</span>
+            <span class="spec">{r.spec}</span>
+          </th>
+          <td class="col-use">{r.use}</td>
+          <td class="col-price num">
+            <span class="price">{fmt(r.price)}</span>
+            <span class="unit">{unitLabel[r.unit]}</span>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <p class="note">{g.note} Prețuri orientative, fără TVA.</p>
+</div>
+
+<style>
+  .tarif h3 { margin-bottom: 1rem; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 3px solid var(--color-ink);
+  }
+  thead th {
+    text-align: left;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+    padding: 0.6rem 0.75rem 0.6rem 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+  tbody tr { border-bottom: 1px solid var(--color-line); transition: background-color 150ms ease-out; }
+  tbody tr:hover { background: var(--color-stock); }
+  tbody th, tbody td {
+    padding: 0.85rem 0.75rem 0.85rem 0;
+    text-align: left;
+    vertical-align: baseline;
+    font-weight: 400;
+  }
+  .name { display: block; font-weight: 700; font-size: 1.05rem; line-height: 1.25; }
+  .spec { display: block; font-size: 0.9rem; color: var(--color-ink-soft); }
+  .col-use { color: var(--color-ink-soft); font-size: 0.95rem; }
+  .col-price { text-align: right !important; white-space: nowrap; padding-right: 0 !important; }
+  .price {
+    font-weight: 800;
+    font-stretch: 88%;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+  .unit { display: block; font-size: 0.8rem; color: var(--color-ink-soft); }
+  .note { margin-top: 0.85rem; font-size: 0.88rem; color: var(--color-ink-soft); max-width: 46rem; }
+
+  @media (max-width: 640px) {
+    .col-use { display: none; }
+  }
+</style>

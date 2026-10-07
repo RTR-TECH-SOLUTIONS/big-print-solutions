@@ -1,0 +1,91 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import IconWhatsapp from '../components/IconWhatsapp.astro';
+import { site, u, waDefault } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const {
+  title,
+  description = `Producție publicitară în ${site.city}: print format mare, litere volumetrice, firme luminoase și colantări auto. Din ${site.since}.`
+} = Astro.props;
+---
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={u('/favicon.svg')} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#141414" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body>
+    <a href="#continut" class="skip">Sari la conținut</a>
+    <Header />
+    <main id="continut">
+      <slot />
+    </main>
+    <Footer />
+    <a href={waDefault} class="wa-float" target="_blank" rel="noopener" aria-label="Scrie-ne pe WhatsApp">
+      <IconWhatsapp />
+    </a>
+    <script>
+      // Intrare discretă a secțiunilor la scroll. Fără JS sau cu reduced motion, totul e vizibil.
+      const targets = document.querySelectorAll('main > section:not(:first-child) > .wrap, main > section:not(:first-child) > .marquee');
+      if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const io = new IntersectionObserver(
+          (entries) => entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('in');
+              io.unobserve(e.target);
+            }
+          }),
+          { rootMargin: '0px 0px -8% 0px' }
+        );
+        targets.forEach((t) => { t.classList.add('reveal'); io.observe(t); });
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  .skip {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 100;
+    background: var(--color-yellow);
+    color: var(--color-ink);
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-btn);
+    font-weight: 700;
+  }
+  .skip:focus { top: 1rem; }
+
+  .wa-float {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 30;
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: #1faa55;
+    color: #fff;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.18), 0 8px 20px rgb(0 0 0 / 0.18);
+    transition: transform 180ms ease-out;
+  }
+  .wa-float:hover { transform: translateY(-2px); }
+  .wa-float :global(svg) { width: 1.75rem; height: 1.75rem; }
+  @media (min-width: 1240px) {
+    .wa-float { display: none; }
+  }
+</style>

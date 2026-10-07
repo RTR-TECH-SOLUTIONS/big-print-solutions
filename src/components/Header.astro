@@ -1,0 +1,195 @@
+---
+import Logo from './Logo.astro';
+import IconWhatsapp from './IconWhatsapp.astro';
+import { site, nav, u, waDefault } from '../data/site';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => path === u(href).replace(/\/$/, '');
+---
+<div class="topbar">
+  <div class="wrap topbar-in">
+    <span class="topbar-addr">{site.address}</span>
+    <span class="topbar-hours">{site.hours}</span>
+    <a href={u('/despre')} class="topbar-link">Despre noi</a>
+    <a href={site.phoneHref} class="topbar-phone num">{site.phone}</a>
+  </div>
+</div>
+
+<header class="header" data-header>
+  <div class="wrap header-in">
+    <Logo />
+
+    <nav class="nav" aria-label="Navigare principală">
+      <ul>
+        {nav.map((item) => (
+          <li>
+            <a href={u(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <a href={waDefault} class="btn btn-yellow header-cta" target="_blank" rel="noopener">
+      <IconWhatsapp />
+      Cere ofertă
+    </a>
+
+    <button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav" data-burger>
+      <span class="sr-only">Meniu</span>
+      <span class="burger-lines" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <div class="mobile-nav" id="mobile-nav" hidden data-mobile-nav>
+    <ul class="wrap">
+      {nav.map((item) => (
+        <li>
+          <a href={u(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+        </li>
+      ))}
+      <li class="mobile-contact">
+        <a href={site.phoneHref} class="btn btn-line-light num">{site.phone}</a>
+        <a href={waDefault} class="btn btn-yellow" target="_blank" rel="noopener"><IconWhatsapp /> Cere ofertă</a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const burger = document.querySelector<HTMLButtonElement>('[data-burger]');
+  const panel = document.querySelector<HTMLElement>('[data-mobile-nav]');
+  if (burger && panel) {
+    burger.addEventListener('click', () => {
+      const open = burger.getAttribute('aria-expanded') === 'true';
+      burger.setAttribute('aria-expanded', String(!open));
+      panel.hidden = open;
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) {
+        burger.setAttribute('aria-expanded', 'false');
+        panel.hidden = true;
+        burger.focus();
+      }
+    });
+  }
+</script>
+
+<style>
+  .topbar {
+    background: var(--color-ink-800);
+    color: #fff;
+    font-size: 0.875rem;
+  }
+  .topbar-in {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 2.25rem;
+  }
+  .topbar-hours { color: var(--color-mist); }
+  .topbar-link { color: var(--color-mist); text-decoration: none; }
+  .topbar-link:hover { color: #fff; text-decoration: underline; }
+  .topbar-phone {
+    margin-left: auto;
+    font-weight: 700;
+    color: var(--color-yellow);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .topbar-phone:hover { text-decoration: underline; }
+
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--color-ink);
+    color: #fff;
+    border-bottom: 1px solid #33322f;
+  }
+  .header-in {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: var(--header-h);
+  }
+  .nav { margin-left: auto; }
+  .nav ul { display: flex; gap: 1.35rem; white-space: nowrap; }
+  .nav a {
+    display: block;
+    padding: 0.5rem 0;
+    font-weight: 600;
+    font-size: 0.98rem;
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    transition: border-color 180ms ease-out;
+  }
+  .nav a:hover,
+  .nav a[aria-current='page'] { border-bottom-color: var(--color-yellow); }
+
+  .burger {
+    display: none;
+    width: 3rem;
+    height: 3rem;
+    margin-left: auto;
+    border-radius: var(--radius-btn);
+    border: 2px solid rgb(255 255 255 / 0.55);
+    place-items: center;
+    cursor: pointer;
+  }
+  .burger-lines,
+  .burger-lines::before,
+  .burger-lines::after {
+    display: block;
+    width: 1.25rem;
+    height: 2px;
+    background: #fff;
+    transition: transform 180ms ease-out;
+  }
+  .burger-lines { position: relative; }
+  .burger-lines::before,
+  .burger-lines::after { content: ''; position: absolute; left: 0; }
+  .burger-lines::before { top: -6px; }
+  .burger-lines::after { top: 6px; }
+  .burger[aria-expanded='true'] .burger-lines { background: transparent; }
+  .burger[aria-expanded='true'] .burger-lines::before { transform: translateY(6px) rotate(45deg); }
+  .burger[aria-expanded='true'] .burger-lines::after { transform: translateY(-6px) rotate(-45deg); }
+
+  .mobile-nav {
+    border-top: 1px solid #33322f;
+    background: var(--color-ink);
+    max-height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+  }
+  .mobile-nav ul { padding-block: 0.5rem 1.25rem; }
+  .mobile-nav li a:not(.btn) {
+    display: block;
+    padding: 0.85rem 0;
+    font-weight: 700;
+    font-size: 1.15rem;
+    text-decoration: none;
+    border-bottom: 1px solid #33322f;
+  }
+  .mobile-nav a[aria-current='page'] { box-shadow: inset 4px 0 0 var(--color-yellow); padding-left: 0.75rem; }
+  .mobile-contact {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+  }
+  .mobile-contact .btn { white-space: nowrap; padding-inline: 0.75rem; }
+  @media (max-width: 420px) {
+    .mobile-contact { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 1239px) {
+    .nav, .header-cta { display: none; }
+    .burger { display: grid; }
+  }
+  @media (min-width: 1240px) {
+    .mobile-nav { display: none; }
+  }
+  @media (max-width: 700px) {
+    .topbar-addr, .topbar-hours, .topbar-link { display: none; }
+    .topbar-in::before { content: 'Râmnicu Vâlcea, din 1998'; color: var(--color-mist); white-space: nowrap; }
+  }
+</style>

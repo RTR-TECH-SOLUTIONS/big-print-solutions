@@ -1,0 +1,139 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Shot from '../components/Shot.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site, u } from '../data/site';
+import { clients } from '../data/lucrari';
+
+// Lista de lucrări de pe pagina „Producție publicitară" a site-ului vechi.
+const production = [
+  'Imprimare banner', 'Hărți și planșe CAD', 'Afișe de spectacol', 'Mesh', 'Canvas', 'Autocolant',
+  'Firme luminoase', 'Postere', 'Calendare', 'Decor tricouri, eșarfe, cravate, echipament sportiv',
+  'Agende', 'Promoționale', 'Imprimare brichete', 'Decor auto', 'Prelată TIR', 'Litere volumetrice',
+  'Steaguri', 'Insigne', 'Gravură', 'Plăcuțe stradale', 'Indicatoare', 'Serigrafie', 'Căni', 'Baloane',
+  'Mouse pad', 'Fotografie publicitară', 'Casete luminoase', 'Totemuri', 'Imprimare pixuri',
+  'Publicitate pe panouri stradale sau clădiri', 'Promovare evenimente', 'Publicitate pe bicicletă',
+  'Design interior restaurante, pub-uri, cafenele, hoteluri', 'Print și înrămare tablouri',
+  'Stickere motociclete', 'Umbrele de terasă personalizate', 'Copertine', 'Decupare polistiren',
+  'Decoruri teatru și televiziune', 'Postere de mari dimensiuni', 'Decor autocolant geam sablat',
+  'Publicitate pe autobuze', 'Fronton și acoperiri din alucobond', 'Litere volumetrice cu LED-uri',
+  'Semne de orientare', 'Firme din polistiren pentru hoteluri și pensiuni', 'Promovare radio și televiziuni'
+];
+---
+<Layout
+  title="Despre noi | Big Print Solutions și Ilustrator Advertising"
+  description="Ilustrator Advertising, Râmnicu Vâlcea, din 1998: strategii de comunicare, creație, producție publicitară și servicii tipografice."
+>
+  <section class="head">
+    <div class="wrap head-in">
+      <div>
+        <h1>Despre noi</h1>
+        <p class="lead">Simpla publicitate nu mai este suficientă. De aceea, într-o lume a brandurilor, unde este nevoie de comunicare și de corelarea permanentă cu strategiile de afaceri, există {site.brand}.</p>
+      </div>
+      <Shot file="pn-02" eager />
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="wrap story-in">
+      <div class="prose">
+        <p>Dinamici și ambițioși, am debutat în {site.since}, investindu-ne timpul și energia în strategii de comunicare și de media, creație, producție, evenimente, marketing direct, corporate ID, design de ambalaj și web design, producție publicitară, servicii tipografice.</p>
+        <p>Drumul de la idee până la mesajul final se poate transforma într-un proiect de succes cu ajutorul nostru și, bineînțeles, cu o dotare tehnică de excepție. Imprimantele solvent și ecosolvent de care dispunem (Mutoh Spitfire și Océ 9065) asigură durata mare de viață a imprimărilor outdoor, cât și calitate pentru imprimările indoor.</p>
+        <p>Utilajele pentru decupat literele din polistiren sau acrilice, cutter-plotterele, utilajele serigrafice și tampografice oferă o multitudine de soluții pentru satisfacerea nevoilor dumneavoastră.</p>
+        <p>Cea mai bună recomandare este portofoliul, iar colaborarea cu nume mari de pe piața din Vâlcea și chiar din România reprezintă cea mai bună carte de vizită.</p>
+        <a href={u('/portofoliu')} class="btn btn-ink">Vezi portofoliul</a>
+      </div>
+      <dl class="facts">
+        <div><dt>Din</dt><dd class="num">{site.since}</dd></div>
+        <div><dt>Firma</dt><dd>{site.legalName}</dd></div>
+        <div><dt>Mărci</dt><dd>{site.brand}<br />{site.name}</dd></div>
+        <div><dt>Sediu</dt><dd>{site.address}</dd></div>
+        <div><dt>Print</dt><dd>Mutoh Spitfire<br />Océ 9065</dd></div>
+        <div><dt>Atelier</dt><dd>Decupare polistiren și acril<br />Cutter-plottere<br />Serigrafie și tampografie</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="workshop">
+    <div class="wrap workshop-grid">
+      {['im-01', 'pa-04', 'sg-02', 'pm-01'].map((file) => <Shot file={file} ratio="4 / 3" />)}
+    </div>
+  </section>
+
+  <section class="production">
+    <div class="wrap">
+      <h2>Producție publicitară</h2>
+      <ul class="prod-list">
+        {production.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="all-clients">
+    <div class="wrap">
+      <h2>Am lucrat pentru</h2>
+      <ul class="client-cols">
+        {clients.map((c) => <li>{c}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand />
+</Layout>
+
+<style>
+  .head { padding-block: clamp(2.5rem, 6vw, 5rem); background: var(--color-ink); color: #fff; }
+  .head-in { display: grid; gap: 2.5rem; align-items: center; }
+  h1 { font-size: clamp(2.4rem, 5.6vw, 4.5rem); }
+  .head .lead { margin-top: 1.25rem; color: #cfccc4; max-width: 34rem; }
+  .head :global(figcaption span) { color: #a9a69e; }
+
+  .story { padding-block: clamp(3rem, 7vw, 5.5rem); }
+  .story-in { display: grid; gap: 3rem; align-items: start; }
+  .prose p { max-width: 40rem; margin-bottom: 1.1rem; font-size: 1.12rem; line-height: 1.65; }
+  .prose .btn { margin-top: 0.75rem; }
+  .facts { border-top: 3px solid var(--color-ink); }
+  .facts > div {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .facts dt { color: var(--color-ink-soft); font-size: 0.92rem; }
+  .facts dd { font-weight: 600; line-height: 1.4; }
+
+  .workshop { padding-bottom: clamp(3rem, 7vw, 5.5rem); }
+  .workshop-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); }
+
+  .production { background: var(--color-stock); padding-block: clamp(3rem, 7vw, 5.5rem); }
+  .prod-list {
+    margin-top: 2rem;
+    columns: 3 15rem;
+    column-gap: 2.5rem;
+    border-top: 3px solid var(--color-ink);
+  }
+  .prod-list li {
+    break-inside: avoid;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--color-line);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .all-clients { padding-block: clamp(3rem, 7vw, 5.5rem); }
+  .client-cols { margin-top: 2rem; columns: 3 14rem; column-gap: 2.5rem; border-top: 3px solid var(--color-ink); }
+  .client-cols li {
+    break-inside: avoid;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--color-line);
+    font-weight: 700;
+    font-stretch: 90%;
+    font-size: 1.1rem;
+  }
+
+  @media (min-width: 900px) {
+    .head-in { grid-template-columns: 1.25fr 1fr; gap: 4rem; }
+    .story-in { grid-template-columns: 1.5fr 1fr; gap: 5rem; }
+  }
+</style>

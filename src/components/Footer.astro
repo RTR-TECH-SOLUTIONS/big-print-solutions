@@ -1,0 +1,75 @@
+---
+import Logo from './Logo.astro';
+import { site, nav, u } from '../data/site';
+---
+<footer class="footer">
+  <div class="wrap footer-in">
+    <div class="footer-brand">
+      <Logo size={84} />
+      <p>{site.name} este marca de producție a agenției {site.brand}, {site.city}, din {site.since}.</p>
+    </div>
+
+    <nav aria-label="Pagini">
+      <p class="footer-h">Pagini</p>
+      <ul>
+        {nav.map((item) => <li><a href={u(item.href)}>{item.label}</a></li>)}
+        <li><a href={u('/despre')}>Despre noi</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <p class="footer-h">Contact</p>
+      <ul>
+        <li>{site.address}</li>
+        <li><a href={site.phoneHref} class="num">{site.phone}</a> · <a href={site.phone2Href} class="num">{site.phone2}</a></li>
+        <li class="num">Fix <a href={site.landlineHref}>{site.landline}</a> · Fax {site.fax}</li>
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        <li>{site.hours}</li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="footer-h">Firma</p>
+      <ul>
+        <li>{site.legalName}</li>
+        <li class="num">CUI {site.cui}</li>
+        <li class="num">{site.regCom}</li>
+        <li><a href={site.facebook} target="_blank" rel="noopener">Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer-legal">
+    <span>© {new Date().getFullYear()} {site.legalName}. Prețurile afișate sunt orientative și nu includ TVA.</span>
+    <span class="legal-links"><a href={u('/termeni-si-conditii')}>Termeni și condiții</a> · <a href={u('/despre-cookies')}>Despre cookies</a></span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-ink);
+    color: #d9d6cf;
+    padding-top: clamp(3rem, 6vw, 4.5rem);
+    font-size: 0.95rem;
+  }
+  .footer-in {
+    display: grid;
+    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  }
+  .footer-brand p { margin-top: 1rem; max-width: 22rem; }
+  .footer-h { color: #fff; font-weight: 700; margin-bottom: 0.75rem; }
+  .footer li { padding: 0.2rem 0; }
+  .footer a { text-decoration: none; }
+  .footer a:hover { color: var(--color-yellow); text-decoration: underline; }
+  .footer-legal {
+    margin-top: 3rem;
+    padding-block: 1.25rem;
+    border-top: 1px solid #33322f;
+    color: var(--color-mist);
+    font-size: 0.85rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    justify-content: space-between;
+  }
+</style>
